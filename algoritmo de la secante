@@ -1,0 +1,39 @@
+def secante(f, x0, x1, eps=1e-6, max_iter=100):
+  
+    table = []
+    fx0 = f(x0)
+    fx1 = f(x1)
+    for i in range(max_iter):
+        row = [i, x1, fx1]
+        table.append(row)
+        if abs(fx1) < eps:
+            return x1, table
+        if fx1 == fx0:
+            raise ValueError("División por cero.")
+        x = x1 - fx1 * (x1 - x0) / (fx1 - fx0)
+        x0 = x1
+        x1 = x
+        fx0 = fx1
+        fx1 = f(x1)
+    raise ValueError("No se encontró la raíz después de {} iteraciones.".format(max_iter))
+
+
+
+def f(x):
+    return x ** 3 - x - 1
+
+x0 = 1.0
+x1 = 2.0
+raiz, tabla = secante(f, x0, x1)
+print("Una raíz de la función es aproximadamente {:.6f}.".format(raiz))
+
+headers = ["Iteración", "x", "f(x)"]
+print("\nTabla de iteraciones:")
+for h in headers:
+    print(f"{h:<12s}", end="")
+print()
+print("-" * 40)
+for row in tabla:
+    for r in row:
+        print(f"{r:<12.6g}", end="")
+    print()
